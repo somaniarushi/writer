@@ -45,15 +45,15 @@ export default function Home() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-4xl">Error loading entries</p>
+        <p className={`text-4xl ${jbm.className}`}>Error loading entries</p>
       </div>
     )
   }
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen ${jbm.className}">
-        <p className="text-4xl">Loading...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className={`text-4xl ${jbm.className}`}>Loading...</p>
       </div>
     )
   }
