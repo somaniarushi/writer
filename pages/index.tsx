@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React, {useState, useEffect} from 'react'
-import {GoogleSpreadsheet} from 'google-spreadsheet'
+import {GoogleSpreadsheet, GoogleSpreadsheetRow} from 'google-spreadsheet'
 import { JetBrains_Mono } from 'next/font/google'
 import Typewriter from 'typewriter-effect';
 import { time } from 'console';
@@ -9,14 +9,19 @@ import { time } from 'console';
 const jbm = JetBrains_Mono({ subsets: ['latin'] })
 
 export default function Home() {
-  // On load, read the spreadsheet and set the state
-  const [entries, setEntries] = useState([])
+  // Set type to GoogleSpreadsheetRow[]
+  const [entries, setEntries] : any  = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
   useEffect(() => {
     const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID
     const doc = new GoogleSpreadsheet(SHEET_ID)
+    // If env variables are not set, do not load
+    if (!SHEET_ID || !process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL || !process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY) {
+      setError(true)
+      return
+    }
     doc.useServiceAccountAuth({
       client_email: process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL,
       private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(
@@ -70,7 +75,7 @@ export default function Home() {
       </div>
       {/* Align all entries with each other */}
       <div className="flex flex-col justify-between pb-8">
-        {entries.map((entry) => (
+        {entries.map((entry: any) => (
           // Create space between time and entry
           <div className="flex flex-col md:flex-row md:items-center pb-8"
           key={entry.Time}>
