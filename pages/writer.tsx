@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 const pass = process.env.NEXT_PUBLIC_PW;
@@ -43,8 +44,9 @@ function Writer() {
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
+      className={`flex min-h-screen flex-col items-center p-24 ${inter.className}`}
     >
+      <Link href="/" className="pb-6 m-0"> Go to Reader </Link>
       <div className="z-10 w-full max-w-5xl font-mono text-sm lg:flex lg:space-x-8">
         {/* Add padding bottom */}
         <div className="flex flex-col items-center justify-between pb-8">
