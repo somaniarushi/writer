@@ -11,7 +11,7 @@ export default function Home() {
   const [entries, setEntries] : any  = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [search, setSearch] = useState(undefined)
+  const [search, setSearch] = useState('')
   const [searchStr, setSearchStr] = useState('')
 
   useEffect(() => {
@@ -95,15 +95,17 @@ export default function Home() {
       </div>
       <div className="flex flex-col justify-between pb-8">
         {entries.filter((entry: any) => {
-          if (searchStr === '') return true
+          if (searchStr === '' || !search) return true
           const searchResult = search.search(searchStr)
-          if (searchResult.length === 0) {
+          // If search result is empty, return false
+          // If search result is not a list, return false
+          if (!searchResult || !Array.isArray(searchResult) || searchResult.length === 0) {
             return false
           } else {
             return searchResult.map((result: any) => result.Entry).includes(entry.Entry)
           }
         }).map((entry: any) => (
-          <EntryDisplay entry={entry} />
+          <EntryDisplay entry={entry} key={entry.Time}/>
         ))}
       </div>
     </main>

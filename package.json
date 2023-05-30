@@ -26,6 +26,7 @@
     "typewriter-effect": "^2.19.0"
   },
   "devDependencies": {
-    "@types/google-spreadsheet": "^3.3.2"
+    "@types/google-spreadsheet": "^3.3.2",
+    "@types/js-search": "^1.4.0"
   }
 }
