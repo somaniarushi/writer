@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
 
 const inter = Inter({ subsets: ["latin"] });
 const pass = process.env.NEXT_PUBLIC_PW;
@@ -34,6 +35,7 @@ function Writer() {
     const newRow = await sheet.addRow({
       Entry: text,
       Time: new Date().toString(),
+      UID: uuidv4(),
     });
     console.log(newRow);
     setText("");
