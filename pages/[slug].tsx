@@ -15,6 +15,7 @@ export default function DynamicPage() {
     const [entry, setEntry]: any = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [buttonPress, setButtonPress] = useState(false);
 
     useEffect(() => {
     const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
@@ -101,8 +102,55 @@ export default function DynamicPage() {
               hour12: true,
             })
           }</p>
-        <p className={`${jbm.className} pb-2`}>{entry.Entry}</p>
+        <p className={`${jbm.className} pb-4`}>{entry.Entry}</p>
+        <button
+            className={`text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center ${jbm.className} mb-4`}
+            onClick={() => {
+                // Write URL
+            navigator.clipboard.writeText(window.location.href);
+            setButtonPress(true);
+        }}>
+            <CopySVG />
+            Copy
+        </button>
         <Link href="/" className={`${jbm.className} text-blue-500`}>Back to Home</Link>
+        {/* On button press, display toast for 1 second */}
+        {buttonPress && (
+            <Toast message="Copied to clipboard!" duration={1000} setFalse={setButtonPress} />
+        )}
         </div>
     );
+}
+
+function Toast({ message, duration, setFalse }: any) {
+    // Set a timer to hide the toast
+    useEffect(() => {
+        const timer = setTimeout(() => {
+        setFalse(false);
+        }, duration);
+        return () => clearTimeout(timer);
+    }, [duration]);
+
+    return (
+        <div
+        className={`text-sm fixed bottom-10 ml-4 mb-4 p-2 bg-green-600 text-white rounded-md ${jbm.className} transition-opacity duration-500`}
+        style={{ zIndex: 50 }}
+        >
+        {message}
+        </div>
+    );
+}
+
+function CopySVG() {
+    return (
+        <svg
+        className="fill-current w-4 h-4 mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        >
+        <path
+            d="M19,21H5a2,2,0,0,1-2-2V9A2,2,0,0,1,5,7H7V5A2,2,0,0,1,9,3h6a2,2,0,0,1,2,2v2h2a2,2,0,0,1,2,2v8A2,2,0,0,1,19,21ZM9,5V7h6V5Zm6,14V13H9v6Z"
+        />
+        </svg>
+    )
 }
