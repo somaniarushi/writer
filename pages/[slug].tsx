@@ -86,8 +86,8 @@ export default function DynamicPage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-10 md:p-64">
         <Head>
-            <title>{entry.Entry}</title>
-            <meta name="description" content={entry.Entry} />
+            <meta property="og:title" content={entry.Entry} />
+            <meta property="og:description" content={entry.Entry} />
         </Head>
         <p className={`text-sm ${jbm.className} text-gray-400 pb-2`}>{
             // Display date and time in a readable format, use zero padding
