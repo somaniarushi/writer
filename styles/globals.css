@@ -10,6 +10,15 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+blockquote {
+  color: #868686;
+  margin: 0;
+  padding-left: 1em;
+  margin-bottom: 1em;
+  border-left: 3px #eee solid;
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* Dark text color */
@@ -20,6 +29,13 @@
   /* Set textarea font color to black */
   textarea, input {
     color: rgb(var(--background-end-rgb));
+  }
+  blockquote {
+    color: #bdbdbd;
+    margin: 0;
+    padding-left: 1em;
+    margin-bottom: 1em;
+    border-left: 3px #eee solid;
   }
 }
 

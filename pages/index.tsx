@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import Typewriter from "typewriter-effect";
 import * as JsSearch from "js-search";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 
 const jbm = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -152,7 +153,9 @@ const EntryDisplay = ({ entry }: any) => {
             })
           }
         </p>
-        <p className="pl-5 md:pl-0 md:text-sm md:w-1/2">{entry.Entry}</p>
+        <p className="pl-5 md:pl-0 md:text-sm md:w-1/2">
+          <ReactMarkdown>{entry.Entry}</ReactMarkdown>
+        </p>
       </div>
     </Link>
   );
