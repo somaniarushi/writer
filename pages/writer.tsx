@@ -1,19 +1,15 @@
 import { useState } from "react";
 import { GoogleSpreadsheet } from "google-spreadsheet";
-import { Inter } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
+import { signIn, signOut, useSession } from "next-auth/react"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = JetBrains_Mono({ subsets: ["latin"] });
 const pass = process.env.NEXT_PUBLIC_PW;
 
 function Writer() {
   const submitEvent = async () => {
-    // If the password is incorrect, do not submit
-    if (pw !== pass) {
-      console.log("Incorrect password");
-      return;
-    }
     const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
     const doc = new GoogleSpreadsheet(SHEET_ID);
     // If env variables are not set, do not load
@@ -41,40 +37,52 @@ function Writer() {
     setText("");
   };
 
-  const [pw, setPw] = useState("");
   const [text, setText] = useState("");
+
+  // If not signed in, return sign in button
+  const { data: session } = useSession()
+  if (!session) {
+    return (
+      <main
+        className={`flex min-h-screen flex-col items-center p-24 ${inter.className}`}
+      >
+        <GoToReader />
+        <div className="flex flex-col">
+          <p className="text-center mb-6">Sign in to submit entries</p>
+          <button onClick={() => signIn()} className="border-2 border-black text-sm text-center color-black p-2">
+            Sign in
+          </button>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main
       className={`flex min-h-screen flex-col items-center p-24 ${inter.className}`}
     >
-      <Link href="/" className="pb-6 m-0"> Go to Reader </Link>
-      <div className="z-10 w-full max-w-5xl font-mono text-sm lg:flex lg:space-x-8">
-        {/* Add padding bottom */}
-        <div className="flex flex-col items-center justify-between pb-8">
-          <label htmlFor="password">Password</label>
-          <input
-            type="text"
-            id="password"
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
-            className="w-full border-2 border-black"
-          />
-        </div>
-
+        <GoToReader />
         <div className="flex flex-col items-center">
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full border-2 border-black"
+            className="w-full border-2 border-black mb-6"
           ></textarea>
-        <button onClick={submitEvent} className="z-10">
+        <button onClick={submitEvent} className="border-2 border-black text-sm lg:flex lg:space-x-8 p-2 mb-6">
           Submit
         </button>
         </div>
-      </div>
+      <button onClick={() => signOut()} className="z-10 mb-6 border-2 border-black text-sm lg:flex lg:space-x-8 p-2">
+        Sign out
+      </button>
     </main>
   );
+}
+
+function GoToReader() {
+  return (
+    <Link href="/" className="mb-6 m-0 text-center border-2 p-1 border-black "> Go to Reader </Link>
+  )
 }
 
 export default Writer;
