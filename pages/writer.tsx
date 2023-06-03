@@ -43,10 +43,13 @@ function Writer() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+
     if (session && session.user && session.user.email && session.user.email != process.env.NEXT_PUBLIC_EMAIL) {
       console.log("Cannot submit entries");
       setError(true);
       return;
+    } else {
+      setError(false);
     }
   }, [session])
 
