@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
@@ -9,6 +9,8 @@ const inter = JetBrains_Mono({ subsets: ["latin"] });
 const pass = process.env.NEXT_PUBLIC_PW;
 
 function Writer() {
+  const { data: session } = useSession()
+
   const submitEvent = async () => {
     const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
     const doc = new GoogleSpreadsheet(SHEET_ID);
@@ -38,9 +40,16 @@ function Writer() {
   };
 
   const [text, setText] = useState("");
+  const [error, setError] = useState(false);
 
-  // If not signed in, return sign in button
-  const { data: session } = useSession()
+  useEffect(() => {
+    if (session && session.user && session.user.email && session.user.email != process.env.NEXT_PUBLIC_EMAIL) {
+      console.log("Cannot submit entries");
+      setError(true);
+      return;
+    }
+  }, [session])
+
   if (!session) {
     return (
       <main
@@ -53,6 +62,20 @@ function Writer() {
             Sign in
           </button>
         </div>
+      </main>
+    )
+  }
+
+  if (error) {
+    return (
+      <main
+        className={`flex min-h-screen flex-col items-center p-24 ${inter.className}`}
+      >
+        <GoToReader />
+        <p className="text-center mb-6">You are not authorized to submit entries</p>
+        <button onClick={() => signOut()} className="border-2 border-black text-sm lg:flex lg:space-x-8 p-2 mb-6">
+          Sign out
+        </button>
       </main>
     )
   }
