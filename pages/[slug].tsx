@@ -3,6 +3,7 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 import { useEffect, useState } from "react";
 import { JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
+import Head from 'next/head';
 
 const jbm = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -83,7 +84,11 @@ export default function DynamicPage() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-64">
+        <div className="flex flex-col items-center justify-center min-h-screen p-10 md:p-64">
+        <Head>
+            <title>{entry.Entry}</title>
+            <meta name="description" content={entry.Entry} />
+        </Head>
         <p className={`text-sm ${jbm.className} text-gray-400 pb-2`}>{
             // Display date and time in a readable format, use zero padding
             // All dates should be the same length
