@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JetBrains_Mono } from "next/font/google";
 import Typewriter from "typewriter-effect";
-import * as JsSearch from "js-search";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
@@ -13,19 +12,8 @@ export default function Home() {
   const [entries, setEntries]: any = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [search, setSearch] = useState("");
   const [searchStr, setSearchStr] = useState("");
 
-  useEffect(() => {
-    const strings = entries.map((entry: any) => ({ Entry: entry.Entry }));
-    // Create a new search object
-    const search: any = new JsSearch.Search("isbn");
-    // Add the strings to the search object
-    search.addIndex("Entry");
-    search.addDocuments(strings);
-    // Set the search object
-    setSearch(search);
-  }, [entries]);
 
   useEffect(() => {
     const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
@@ -77,7 +65,6 @@ export default function Home() {
     );
   }
 
-  console.log(search, search.search("worry"));
   return (
     <main className={`flex flex-col pt-8 pr-5 md:p-16 ${jbm.className}`}>
       <div className="flex justify-between pb-8">
@@ -106,21 +93,10 @@ export default function Home() {
       <div className="flex flex-col justify-between pb-8">
         {entries
           .filter((entry: any) => {
-            if (searchStr === "" || !search) return true;
-            const searchResult = search.search(searchStr);
-            // If search result is empty, return false
-            // If search result is not a list, return false
-            if (
-              !searchResult ||
-              !Array.isArray(searchResult) ||
-              searchResult.length === 0
-            ) {
-              return false;
-            } else {
-              return searchResult
-                .map((result: any) => result.Entry)
-                .includes(entry.Entry);
-            }
+            if (searchStr === "") return true;
+            const entryLower = entry.Entry.toLowerCase();
+            const searchStrLower = searchStr.toLowerCase();
+            return entryLower.includes(searchStrLower);
           })
           .map((entry: any) => (
             <EntryDisplay entry={entry} key={entry.Time} />
