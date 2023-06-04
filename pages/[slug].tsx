@@ -112,7 +112,7 @@ export default function DynamicPage() {
             setButtonPress(true);
         }}>
             <CopySVG />
-            Copy
+            Share
         </button>
         <Link href="/" className={`${jbm.className} text-blue-500`}>Back to Home</Link>
         {/* On button press, display toast for 1 second */}
@@ -155,3 +155,5 @@ function CopySVG() {
         </svg>
     )
 }
+
+
