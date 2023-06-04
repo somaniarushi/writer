@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { useEffect, useState } from "react";
 import { JetBrains_Mono } from "next/font/google";
+import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import Head from 'next/head';
 
@@ -102,7 +103,7 @@ export default function DynamicPage() {
               hour12: true,
             })
           }</p>
-        <p className={`${jbm.className} pb-4`}>{entry.Entry}</p>
+        <p className={`${jbm.className} pb-4`}><ReactMarkdown>{entry.Entry}</ReactMarkdown></p>
         <button
             className={`text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center ${jbm.className} mb-4`}
             onClick={() => {
@@ -116,7 +117,7 @@ export default function DynamicPage() {
         <Link href="/" className={`${jbm.className} text-blue-500`}>Back to Home</Link>
         {/* On button press, display toast for 1 second */}
         {buttonPress && (
-            <Toast message="Copied to clipboard!" duration={1000} setFalse={setButtonPress} />
+            <Toast message="URL copied to clipboard!" duration={800} setFalse={setButtonPress} />
         )}
         </div>
     );
@@ -133,7 +134,7 @@ function Toast({ message, duration, setFalse }: any) {
 
     return (
         <div
-        className={`text-sm fixed bottom-10 ml-4 mb-4 p-2 bg-green-600 text-white rounded-md ${jbm.className} transition-opacity duration-500`}
+        className={`text-sm fixed bottom-10 ml-4 mb-4 p-2 bg-green-600 text-white rounded-md ${jbm.className} animate-pulse`}
         style={{ zIndex: 50 }}
         >
         {message}
