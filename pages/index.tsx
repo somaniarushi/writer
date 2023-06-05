@@ -14,40 +14,57 @@ export default function Home() {
   const [error, setError] = useState(false);
   const [searchStr, setSearchStr] = useState("");
 
-
   useEffect(() => {
-    const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
-    const doc = new GoogleSpreadsheet(SHEET_ID);
-    // If env variables are not set, do not load
-    if (
-      !SHEET_ID ||
-      !process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL ||
-      !process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY
-    ) {
-      setError(true);
-      return;
-    }
-    doc.useServiceAccountAuth({
-      client_email: process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(
-        /\\n/gm,
-        "\n"
-      ),
-    });
-    doc
-      .loadInfo()
-      .then(() => {
-        const sheet = doc.sheetsByIndex[0];
-        sheet.getRows().then((rows) => {
-          setEntries(rows.reverse());
+    fetch("/api/entries")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data !== undefined) {
+          const entries = data['data'].reverse();
+          setEntries(entries);
           setLoading(false);
-        });
+        }
+
       })
       .catch((e) => {
         console.log(e);
         setError(true);
       });
-  }, []);
+  })
+
+
+  // useEffect(() => {
+  //   const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
+  //   const doc = new GoogleSpreadsheet(SHEET_ID);
+  //   // If env variables are not set, do not load
+  //   if (
+  //     !SHEET_ID ||
+  //     !process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL ||
+  //     !process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY
+  //   ) {
+  //     setError(true);
+  //     return;
+  //   }
+  //   doc.useServiceAccountAuth({
+  //     client_email: process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL,
+  //     private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(
+  //       /\\n/gm,
+  //       "\n"
+  //     ),
+  //   });
+  //   doc
+  //     .loadInfo()
+  //     .then(() => {
+  //       const sheet = doc.sheetsByIndex[0];
+  //       sheet.getRows().then((rows) => {
+  //         setEntries(rows.reverse());
+  //         setLoading(false);
+  //       });
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //       setError(true);
+  //     });
+  // }, []);
 
   if (error) {
     return (
@@ -94,12 +111,12 @@ export default function Home() {
         {entries
           .filter((entry: any) => {
             if (searchStr === "") return true;
-            const entryLower = entry.Entry.toLowerCase();
+            const entryLower = entry['entry'].toLowerCase();
             const searchStrLower = searchStr.toLowerCase();
             return entryLower.includes(searchStrLower);
           })
           .map((entry: any) => (
-            <EntryDisplay entry={entry} key={entry.Time} />
+            <EntryDisplay entry={entry} key={entry['time']} />
           ))}
       </div>
     </main>
@@ -109,17 +126,17 @@ export default function Home() {
 const EntryDisplay = ({ entry }: any) => {
   // Create space between time and entry
   return (
-    <Link href={`/${entry.UID}`}>
+    <Link href={`/${entry['id']}`}>
       <div
         className="flex flex-col md:flex-row md:items-center pb-8"
-        key={entry.Time}
+        key={entry['time']}
       >
         {/* Make font smaller */}
         <p className="text-sm pr-8 pl-5 text-gray-400 text-2sm">
           {
             // Display date and time in a readable format, use zero padding
             // All dates should be the same length
-            new Date(entry.Time).toLocaleString("en-US", {
+            new Date(entry['time']).toLocaleString("en-US", {
               year: "2-digit",
               month: "2-digit",
               day: "2-digit",
@@ -130,7 +147,7 @@ const EntryDisplay = ({ entry }: any) => {
           }
         </p>
         <p className="pl-5 md:pl-0 md:text-sm md:w-1/2">
-          <ReactMarkdown>{entry.Entry}</ReactMarkdown>
+          <ReactMarkdown>{entry['entry']}</ReactMarkdown>
         </p>
       </div>
     </Link>

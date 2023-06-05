@@ -28,12 +28,24 @@ function Writer() {
       ),
     });
 
+    const embeddingAPICall = await fetch("/api/embed", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+    })
+
+    const embeddingJson = await embeddingAPICall.json();
+    const embedding = embeddingJson["embedding"];
+
     await doc.loadInfo();
     const sheet = doc.sheetsByIndex[0];
     const newRow = await sheet.addRow({
       Entry: text,
       Time: new Date().toString(),
       UID: uuidv4(),
+      Embedding: embedding.toString(),
     });
     console.log(newRow);
     setText("");
