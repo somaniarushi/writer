@@ -27,6 +27,7 @@ export default async function handler(
                 id: row.UID,
                 entry: row.Entry,
                 time: row.Time,
+                embedding: row.Embedding,
             }
         });
         return res.status(200).json({ data });
