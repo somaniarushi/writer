@@ -23,48 +23,12 @@ export default function Home() {
           setEntries(entries);
           setLoading(false);
         }
-
       })
       .catch((e) => {
         console.log(e);
         setError(true);
       });
-  })
-
-
-  // useEffect(() => {
-  //   const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
-  //   const doc = new GoogleSpreadsheet(SHEET_ID);
-  //   // If env variables are not set, do not load
-  //   if (
-  //     !SHEET_ID ||
-  //     !process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL ||
-  //     !process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY
-  //   ) {
-  //     setError(true);
-  //     return;
-  //   }
-  //   doc.useServiceAccountAuth({
-  //     client_email: process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL,
-  //     private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(
-  //       /\\n/gm,
-  //       "\n"
-  //     ),
-  //   });
-  //   doc
-  //     .loadInfo()
-  //     .then(() => {
-  //       const sheet = doc.sheetsByIndex[0];
-  //       sheet.getRows().then((rows) => {
-  //         setEntries(rows.reverse());
-  //         setLoading(false);
-  //       });
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //       setError(true);
-  //     });
-  // }, []);
+  }, []);
 
   if (error) {
     return (

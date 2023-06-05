@@ -19,43 +19,25 @@ export default function DynamicPage() {
     const [buttonPress, setButtonPress] = useState(false);
 
     useEffect(() => {
-    const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
-    const doc = new GoogleSpreadsheet(SHEET_ID);
-    // If env variables are not set, do not load
-    if (
-        !SHEET_ID ||
-        !process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL ||
-        !process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY
-    ) {
-        setError(true);
-        return;
-    }
-    doc.useServiceAccountAuth({
-        client_email: process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.NEXT_PUBLIC_GOOGLE_PRIVATE_KEY.replace(
-        /\\n/gm,
-        "\n"
-        ),
-    });
-    doc
-        .loadInfo()
-        .then(() => {
-        const sheet = doc.sheetsByIndex[0];
-        sheet.getRows().then((rows) => {
-            setEntries(rows.reverse());
-            setLoading(false);
-        });
-        })
-        .catch((e) => {
-        console.log(e);
-        setError(true);
-        });
-    }, []);
+        fetch("/api/entries")
+          .then((res) => res.json())
+          .then((data) => {
+            if (data !== undefined) {
+              const entries = data['data'].reverse();
+              setEntries(entries);
+              setLoading(false);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            setError(true);
+          });
+      }, []);
 
     // If the slug matches any entry's UID, set the entry
     useEffect(() => {
         if (entries.length > 0) {
-            const entry = entries.find((entry: any) => entry.UID === slug);
+            const entry = entries.find((entry: any) => entry['id'] === slug);
             setEntry(entry);
         }
     }, [entries, slug]);
@@ -88,13 +70,13 @@ export default function DynamicPage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-10 md:p-64">
         <Head>
-            <meta property="og:title" content={entry.Entry} />
-            <meta property="og:description" content={entry.Entry} />
+            <meta property="og:title" content={entry['entry']} />
+            <meta property="og:description" content={entry['entry']} />
         </Head>
         <p className={`text-sm ${jbm.className} text-gray-400 pb-2`}>{
             // Display date and time in a readable format, use zero padding
             // All dates should be the same length
-            new Date(entry.Time).toLocaleString("en-US", {
+            new Date(entry['time']).toLocaleString("en-US", {
               year: "2-digit",
               month: "2-digit",
               day: "2-digit",
@@ -103,13 +85,14 @@ export default function DynamicPage() {
               hour12: true,
             })
           }</p>
-        <p className={`${jbm.className} pb-4`}><ReactMarkdown>{entry.Entry}</ReactMarkdown></p>
+        <p className={`${jbm.className} pb-4`}><ReactMarkdown>{entry['entry']}</ReactMarkdown></p>
         <button
             className={`text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center ${jbm.className} mb-4`}
             onClick={() => {
                 // Write URL
             navigator.clipboard.writeText(window.location.href);
             setButtonPress(true);
+
         }}>
             <CopySVG />
             Share
