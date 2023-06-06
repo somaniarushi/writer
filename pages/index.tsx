@@ -53,7 +53,6 @@ export default function Home() {
         <title>The Writer</title>
         <meta name="og:description" content="Personal twitter page for AMKS" />
         <meta name="ia:markup_url" content="https://twitter.com/itsamks" />
-
       </Head>
       <div className="flex justify-between pb-8">
         <h1 className="text-4xl pl-5 font-bold">
