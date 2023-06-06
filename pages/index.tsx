@@ -50,7 +50,7 @@ export default function Home() {
   return (
     <main className={`flex flex-col pt-8 pr-5 md:p-16 ${jbm.className}`}>
       <Head>
-        <title>The Writer</title>
+        <meta name="og:title" content="AMKS's Writer" />
         <meta name="og:description" content="Personal twitter page for AMKS" />
         <meta name="ia:markup_url" content="https://twitter.com/itsamks" />
       </Head>
