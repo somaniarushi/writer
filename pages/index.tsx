@@ -51,9 +51,9 @@ export default function Home() {
     <main className={`flex flex-col pt-8 pr-5 md:p-16 ${jbm.className}`}>
       <Head>
         <title>The Writer</title>
-        <meta name="description" content="Personal twitter page for AMKS" />
-        <meta name="author" content="AMKS" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="og:description" content="Personal twitter page for AMKS" />
+        <meta name="ia:markup_url" content="https://twitter.com/itsamks" />
+
       </Head>
       <div className="flex justify-between pb-8">
         <h1 className="text-4xl pl-5 font-bold">
