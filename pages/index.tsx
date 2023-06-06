@@ -3,6 +3,7 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JetBrains_Mono } from "next/font/google";
 import Typewriter from "typewriter-effect";
 import Link from "next/link";
+import Head from "next/head";
 import ReactMarkdown from "react-markdown";
 
 const jbm = JetBrains_Mono({ subsets: ["latin"] });
@@ -48,6 +49,12 @@ export default function Home() {
 
   return (
     <main className={`flex flex-col pt-8 pr-5 md:p-16 ${jbm.className}`}>
+      <Head>
+        <title>The Writer</title>
+        <meta name="description" content="Personal twitter page for AMKS" />
+        <meta name="author" content="AMKS" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <div className="flex justify-between pb-8">
         <h1 className="text-4xl pl-5 font-bold">
           <Typewriter
