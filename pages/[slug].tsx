@@ -47,8 +47,8 @@ export default function DynamicPage() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <NextSeo
-                    title="The Writer"
-                    description="A place to write your thoughts" />
+                    title={entry['entry']}
+                    description={entry['entry']} />
                 <p className={`text-4xl ${jbm.className}`}>Loading...</p>
             </div>
         );
@@ -58,8 +58,8 @@ export default function DynamicPage() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <NextSeo
-                    title="The Writer"
-                    description="A place to write your thoughts" />
+                    title={entry['entry']}
+                    description={entry['entry']} />
                 <p className={`text-4xl ${jbm.className}`}>Error loading entries</p>
             </div>
         );
@@ -69,8 +69,8 @@ export default function DynamicPage() {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <NextSeo
-                    title="The Writer"
-                    description="A place to write your thoughts" />
+                    title={entry['entry']}
+                    description={entry['entry']} />
                 <p className={`text-4xl ${jbm.className} pb-4`}>Entry not found</p>
                 <Link href="/" className={`${jbm.className} text-blue-500`}>Back to Home</Link>
             </div>
@@ -80,7 +80,7 @@ export default function DynamicPage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-10 md:p-64">
             <NextSeo
-                title="The Writer"
+                title={entry['entry']}
                 description={entry['entry']}
                 canonical={`https://writer.amks.me/${entry['id']}`}
                 openGraph={{
