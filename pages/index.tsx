@@ -5,8 +5,25 @@ import Typewriter from "typewriter-effect";
 import Link from "next/link";
 import Head from "next/head";
 import ReactMarkdown from "react-markdown";
+import { NextSeo } from "next-seo";
 
 const jbm = JetBrains_Mono({ subsets: ["latin"] });
+
+const Header = () => {
+  return (
+    <NextSeo
+      title="The Writer"
+      description="A place to write your thoughts"
+      canonical="https://writer.amks.me"
+      openGraph={{
+        url: "https://writer.amks.me",
+        title: "The Writer",
+        description: "A place to write your thoughts",
+      }}
+    />
+  );
+};
+
 
 export default function Home() {
   // Set type to GoogleSpreadsheetRow[]
@@ -34,6 +51,7 @@ export default function Home() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
+        <Header />
         <p className={`text-4xl ${jbm.className}`}>Error loading entries</p>
       </div>
     );
@@ -42,6 +60,7 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
+        <Header />
         <p className={`text-4xl ${jbm.className}`}>Loading...</p>
       </div>
     );
@@ -49,11 +68,7 @@ export default function Home() {
 
   return (
     <main className={`flex flex-col pt-8 pr-5 md:p-16 ${jbm.className}`}>
-      <Head>
-        <meta name="og:title" content="AMKS's Writer" />
-        <meta name="og:description" content="Personal twitter page for AMKS" />
-        <meta name="ia:markup_url" content="https://twitter.com/itsamks" />
-      </Head>
+      <Header />
       <div className="flex justify-between pb-8">
         <h1 className="text-4xl pl-5 font-bold">
           <Typewriter
